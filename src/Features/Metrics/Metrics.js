@@ -4,6 +4,7 @@ import Select from 'react-select'
 import { makeStyles } from '@material-ui/core/styles';
 import { actions } from './reducer'
 import { useDispatch, useSelector } from 'react-redux';
+import FlareTemp from '../flareTemp/FlareTemp.tsx'
 
 const client = createClient({
   url: 'https://react.eogresources.com/graphql',
@@ -20,17 +21,21 @@ const useStyles = makeStyles({
   },
 })
 
+const callFlareTemp = (arr) => { 
+  console.log(arr)
+  return <FlareTemp ></FlareTemp>}
 
-const Metrics = () => {
+
+const Metrics = (props) => {
   const classes = useStyles()
   const [result] = useQuery({query})
   const { fetching, data, error } = result;
   const dispatch = useDispatch();
-
   const onSelectionChange = (params) => {
     let arr =[]
     params.forEach(metric => arr.push(metric.value))
     dispatch(actions.metricsDataRecevied({getMetrics: arr}))
+    callFlareTemp(arr)
   }
   
   useEffect(() => {
@@ -53,10 +58,10 @@ const Metrics = () => {
   onChange = {onSelectionChange}></Select>
 }
 
-export default () => {
+export default (props) => {
   return (
     <Provider value={client}>
-      <Metrics />
+      <Metrics {...props}/>
     </Provider>
   );
 };
